@@ -1,44 +1,7 @@
-schedules:
-    - cron: "0 0 * * *"
-      displayName: Daily midnight test
-      branches:
-          include:
-              - develop
-      always: true
+pool:
+ vmImage: ubuntu-latest
 
 stages:
-    - stage: Integration_Test
-      jobs:
-          - job: Run_Cypress_Tests
-            timeoutInMinutes: 360
-            pool:
-                vmImage: "ubuntu-latest"
-            steps:
-                - task: NodeTool@0
-                  inputs:
-                      versionSpec: "12.x"
-                  displayName: "Install Node.js"
-
-                - task: CacheBeta@1
-                  inputs:
-                      key: npm | $(Agent.OS) | package-lock.json
-                      path: /home/vsts/.npm
-                      restoreKeys: npm | $(Agent.OS) | package-lock.json
-                  displayName: Cache NPM packages
-
-                - task: CacheBeta@1
-                  inputs:
-                      key: cypress | $(Agent.OS) | package-lock.json
-                      path: /home/vsts/.cache/Cypress
-                      restoreKeys: cypress | $(Agent.OS) | package-lock.json
-                  displayName: Cache Cypress binary
-
-                - script: npm ci
-                  displayName: "Install NPM dependencies"
-
-                - script: npm run cy:verify
-                  displayName: "Cypress verify"
-
-                - script: |
-                      npm cy run --spec test1.cy.js,test2cy.js
-                  displayName: "Run Cypress tests"
+  - stage: Stage1
+    jobs:
+     - job: Job1
